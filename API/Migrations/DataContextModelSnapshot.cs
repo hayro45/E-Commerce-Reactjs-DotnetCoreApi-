@@ -159,7 +159,7 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entity.CartItem", b =>
                 {
-                    b.HasOne("API.Entity.Cart", "Cart")
+                    b.HasOne("API.Entity.Cart", null)
                         .WithMany("CartItems")
                         .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -170,8 +170,6 @@ namespace API.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Cart");
 
                     b.Navigation("Product");
                 });

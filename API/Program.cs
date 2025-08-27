@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddDbContext<DataContext>(options =>
 {
     var config = builder.Configuration;
@@ -17,7 +16,6 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddCors();
 
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -38,12 +36,9 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
-app.UseCors(policy =>
+app.UseCors(opt =>
 {
-    policy
-        .AllowAnyHeader()
-        .AllowAnyMethod().AllowCredentials()
-        .WithOrigins("http://localhost:3000");
+    opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000");
 });
 
 app.UseAuthorization();

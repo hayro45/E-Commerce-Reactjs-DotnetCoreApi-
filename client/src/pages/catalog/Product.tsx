@@ -5,6 +5,7 @@ import { Link } from "react-router";
 import { useState } from "react";
 import request from "../../api/requests";
 import { LoadingButton } from "@mui/lab";
+import { useCartContext } from "../../context/CartContext";
 
 interface Props {
   product: IProduct;
@@ -12,19 +13,21 @@ interface Props {
 
 export default function Product({ product }: Props) {
   const [loading, setLoading] = useState(false);
+  const { setCart } = useCartContext();
 
   function handleAddItem(id: number): void {
     setLoading(true);
+    
     request.Cart.addItem(id, 1)
-      .then((cart) => console.log(cart))
+      .then((cart) => setCart(cart))
       .catch((cart) => console.error(cart))
       .finally(() => setLoading(false));
   }
 
   return (
     <>
-      <Card sx={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}> {/* Card düzenlendi */}
-        <CardContent sx={{ flexGrow: 1, textAlign: "center" }}> {/* İçerik esnek hale getirildi ve ortalandı */}
+      <Card sx={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}> 
+        <CardContent sx={{ flexGrow: 1, textAlign: "center" }}> 
           <CardMedia
             sx={{ height: 140, backgroundSize: "contain" }}
             image={`http://localhost:5037/images/${product.imageUrl}`}
@@ -42,7 +45,7 @@ export default function Product({ product }: Props) {
             ${product.price}
           </Typography>
         </CardContent>
-        <CardActions sx={{ display: "flex", justifyContent: "space-evenly", alignItems: "center", gap: 2, flexWrap: "wrap" }}> {/* Düzenleme yapıldı */}
+        <CardActions sx={{ display: "flex", justifyContent: "space-evenly", alignItems: "center", gap: 2, flexWrap: "wrap" }}> 
           <LoadingButton
             loadingPosition="start"
             loading={loading}

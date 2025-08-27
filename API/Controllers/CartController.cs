@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("/api/[controller]")]
 public class CartController : ControllerBase
 {
     private readonly DataContext _context;
@@ -19,76 +19,86 @@ public class CartController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<CartDTO>> GetCart()
     {
-        return CartToDTO(await GetOrCreateCart()); 
+        return CartToDTO(await GetOrCreate());
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddToCart(int quantity, int productId)
+    public async Task<ActionResult> AddItemToCart(int productId, int quantity)
     {
-        var cart = await GetOrCreateCart();
-        var product = await _context.Products.FindAsync(productId);
-        if (product == null) return NotFound("The product was not found.");
+        var cart = await GetOrCreate();
+
+        var product = await _context.Products.FirstOrDefaultAsync(i => i.Id == productId);
+
+        if (product == null)
+            return NotFound("the product is not in database");
 
         cart.AddItem(product, quantity);
+
         var result = await _context.SaveChangesAsync() > 0;
+
         if (result)
             return CreatedAtAction(nameof(GetCart), CartToDTO(cart));
-        return BadRequest(new ProblemDetails { Title = "Problem adding item to cart" });
+
+        return BadRequest(new ProblemDetails { Title = "The product can not be added to cart" });
     }
 
-    private async Task<Cart> GetOrCreateCart()
+    [HttpDelete]
+    public async Task<ActionResult> DeleteItemFromCart(int productId, int quantity)
+    {
+        var cart = await GetOrCreate();
+
+        cart.DeleteItem(productId, quantity);
+
+        var result = await _context.SaveChangesAsync() > 0;
+
+        if (result)
+            return CreatedAtAction(nameof(GetCart), CartToDTO(cart));
+
+        return BadRequest(new ProblemDetails { Title = "Problem removing item from the cart" });
+    }
+
+    private async Task<Cart> GetOrCreate()
     {
         var cart = await _context.Carts
-            .Include(c => c.CartItems)
-            .ThenInclude(ci => ci.Product)
-            .Where(i => i.CustomerId == Request.Cookies["CustomerId"])
-            .FirstOrDefaultAsync();
+                    .Include(i => i.CartItems)
+                    .ThenInclude(i => i.Product)
+                    .Where(i => i.CustomerId == Request.Cookies["customerId"])
+                    .FirstOrDefaultAsync();
 
         if (cart == null)
         {
             var customerId = Guid.NewGuid().ToString();
+
             var cookieOptions = new CookieOptions
             {
-                Expires = DateTime.Now.AddDays(30),
+                Expires = DateTime.Now.AddMonths(1),
                 IsEssential = true
             };
-            Response.Cookies.Append("CustomerId", customerId, cookieOptions);
+
+            Response.Cookies.Append("customerId", customerId, cookieOptions);
             cart = new Cart { CustomerId = customerId };
+
             _context.Carts.Add(cart);
             await _context.SaveChangesAsync();
-
         }
 
         return cart;
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> DeleteItemFromCart(int productId, int quantity)
-    {
-        var cart = await GetOrCreateCart();
-        if (cart == null) return NotFound("The cart was not found.");
-
-        cart.RemoveItem(productId, quantity);
-        var result = await _context.SaveChangesAsync() > 0;
-        if (result)
-            return Ok(cart);
-        return BadRequest(new ProblemDetails { Title = "Problem removing item from cart" });
-    }
     private CartDTO CartToDTO(Cart cart)
     {
         return new CartDTO
         {
             CartId = cart.CartId,
             CustomerId = cart.CustomerId,
-            CartItemDTOs = cart.CartItems.Select(ci => new CartItemDTO
+            CartItems = cart.CartItems.Select(item => new CartItemDTO
             {
-                ProductId = ci.ProductId,
-                Name = ci.Product.Name,
-                Price = ci.Product.Price,
-                ImageUrl = ci.Product.ImageUrl,
-                Quantity = ci.Quantity
+                ProductId = item.ProductId,
+                Name = item.Product.Name,
+                Price = item.Product.Price,
+                Quantity = item.Quantity,
+                ImageUrl = item.Product.ImageUrl
             }).ToList()
         };
     }
-
 }

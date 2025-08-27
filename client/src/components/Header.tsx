@@ -1,47 +1,54 @@
-import {AppBar, Toolbar, Typography, Box, IconButton, Badge, Stack, Button} from "@mui/material";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { NavLink } from "react-router";
+import { ShoppingCart } from "@mui/icons-material";
+import { AppBar, Badge, Box, Button, IconButton, Stack, Toolbar, Typography } from "@mui/material";
+import { Link, NavLink } from "react-router";
+import { useCartContext } from "../context/CartContext";
 
 const links = [
-  { label: "Home", path: "/" },
-  { label: "Catalog", path: "/catalog" },
-  { label: "About", path: "/about" },
-  { label: "Contact", path: "/contact" },
-  { label: "Error", path: "/error" },
-];
+  { title: "Home", to: "/"},
+  { title: "Catalog", to: "/catalog"},
+  { title: "About", to: "/about"},
+  { title: "Contact", to: "/contact"},
+  { title: "Error", to: "/error"},
+]
 
 const navStyles = {
-  color: 'inherit',
-  textDecoration: 'none',
-  '&:hover': { color: 'text.primary' },
-  '&.active': { color: 'warning.main' },
-};
-
-export default function Header(){
-  return (
-    <AppBar position="static" sx={{ marginBottom: 4 }}>
-      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography variant="h6">
-            E-Commerce App 
-          </Typography>
-          <Stack direction="row" spacing={2} sx={{ marginLeft: 4 }}>
-            {links.map((link) => (
-              <Button component={NavLink} to={link.path} key={link.label} sx={navStyles}>
-                {link.label}
-              </Button>
-            ))}
-          </Stack>
-        </Box>
-
-        <Box >
-          <IconButton size="large" edge="end" color="inherit" >
-            <Badge badgeContent={4} color="secondary">
-              <ShoppingCartIcon />
-            </Badge>
-          </IconButton>
-        </Box>
-      </Toolbar>
-    </AppBar>
-  )
+  color: "inherit",
+  textDecoration: "none",
+  "&:hover": {
+    color: "text.primary"
+  },
+  "&.active": {
+    color: "warning.main"
+  }
 }
+
+export default function Header() {
+    const { cart } =  useCartContext();
+    const itemCount = cart?.cartItems.reduce((total, item) => total + item.quantity, 0);
+
+    return (
+      <AppBar position="static" sx={{ mb: 4 }}>
+        <Toolbar sx={ { display: "flex", justifyContent: "space-between"} }>
+            <Box sx={{ display: "flex", alignItems: "center"}}>
+              <Typography variant="h6">E-Commerce</Typography>
+
+              <Stack direction="row">
+                { links.map(link => 
+                  <Button key={link.to} component={NavLink} to={link.to} sx={navStyles}>{link.title}</Button>
+                ) }
+              </Stack>
+
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center"}}>
+                <IconButton component={Link} to="/cart" size="large" edge="start" color="inherit">
+                  <Badge badgeContent={itemCount} color="secondary">
+                    <ShoppingCart/>
+                  </Badge>
+                </IconButton>
+            </Box>
+
+        </Toolbar>
+      </AppBar>
+    );
+  }

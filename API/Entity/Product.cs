@@ -9,14 +9,9 @@ public class Product
 
     [Required]
     public string? Name { get; set; }
-
     public string? Description { get; set; }
-
-    [Range(0, double.MaxValue)]
     public decimal Price { get; set; }
-
     public bool IsActive { get; set; }
     public string? ImageUrl { get; set; }
-
     public int Stock { get; set; }
 }
