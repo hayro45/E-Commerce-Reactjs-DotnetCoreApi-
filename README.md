@@ -49,7 +49,7 @@ This is a full-stack e-commerce application built with .NET Core for the backend
 
 ### Project Structure
 - **API/**: Backend code with controllers, data models, and migrations.
-- **client/**: Frontend code with React components, pages, and API requests.
+- **client/**: Frontend code with React components, features, and API requests.
 
 ## License
 This project is licensed under the MIT License.
