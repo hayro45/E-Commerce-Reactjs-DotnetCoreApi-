@@ -3,21 +3,15 @@ import { AddCircleOutline, Delete, RemoveCircleOutline } from "@mui/icons-materi
 import { LoadingButton } from "@mui/lab";
 import CartSummary from "./CartSummary";
 import { currencyTRY } from "../../utils/formatCurrency";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/store";
 import { addItemToCart, deleteItemFromCart } from "./cartSlice";
-
 
 export default function ShoppingCartPage()
 {
-    const { cart, status} = useAppSelector(state => state.cart);
+    const { cart, status } = useAppSelector(state => state.cart);
     const dispatch = useAppDispatch();
-    
-    
 
-
-    if (cart?.cartItems.length === 0) {
-      return <Alert severity="warning">Sepetinizde ürün yok</Alert>;
-    }
+    if(cart?.cartItems.length === 0) return <Alert severity="warning">Sepetinizde ürün yok</Alert>
 
     return (
         <TableContainer component={Paper}>
@@ -44,31 +38,34 @@ export default function ShoppingCartPage()
                 <TableCell component="th" scope="row">
                   {item.name}
                 </TableCell>
-                <TableCell align="right">{ currencyTRY.format(item.price) } </TableCell>
+                <TableCell align="right">{ currencyTRY.format(item.price)}</TableCell>
                 <TableCell align="right">
-                  <LoadingButton loading={status === "pendingAddItem" + item.productId.toString()}
-                   onClick={() => dispatch(addItemToCart({productId: item.productId,}))}>
+                  <LoadingButton 
+                    loading={status === "pendingAddItem" + item.productId} 
+                    onClick={() => dispatch(addItemToCart({ productId: item.productId}))}>
                     <AddCircleOutline />
                   </LoadingButton>
-                    {item.quantity}
+                  {item.quantity}
                   <LoadingButton 
-                    loading={status === "pendingDeleteItem" + item.productId.toString()+ "single"} 
-                    onClick={() => dispatch(deleteItemFromCart({productId: item.productId, quantity: 1, key: "single"}))}>
+                    loading={status === "pendingDeleteItem" + item.productId + "single"} 
+                    onClick={() => 
+                      dispatch(deleteItemFromCart({ productId: item.productId, quantity: 1, key: "single"}))}>
                     <RemoveCircleOutline />
                   </LoadingButton>
-                </TableCell>
-                <TableCell align="right">{currencyTRY.format(item.price * item.quantity)}</TableCell>
+                  </TableCell>
+                <TableCell align="right">{currencyTRY.format(item.price * item.quantity)} ₺</TableCell>
                 <TableCell align="right">
                     <LoadingButton color="error" 
-                      loading={status === "pendingDeleteItem" + item.productId.toString() + "all"}
-                      onClick={() => dispatch(deleteItemFromCart({productId: item.productId, quantity: item.quantity, key: "all"}))}>
+                      loading={status === "pendingDeleteItem" + item.productId + "all"} 
+                      onClick={() => 
+                        dispatch(deleteItemFromCart({ productId: item.productId, quantity: item.quantity, key: "all"}))}>
                         <Delete />
                     </LoadingButton>
                 </TableCell>
               </TableRow>
             ))}
-
-            <CartSummary/>
+            {/* cart summary */}
+            <CartSummary />
           </TableBody>
         </Table>
       </TableContainer>

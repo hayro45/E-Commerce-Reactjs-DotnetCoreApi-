@@ -1,15 +1,7 @@
-import {Container, Typography} from '@mui/material'
+import { Typography } from "@mui/material";
 
-export default function HomePage(){
-  return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
-        Welcome to Our E-Commerce Store
-      </Typography>
-      <Typography>
-        Discover a wide range of products at unbeatable prices.
-      </Typography>
-      
-    </Container>
-  );
+export default function HomePage() {
+    return (
+        <Typography variant="h2">Home Page</Typography>
+    );
 }
