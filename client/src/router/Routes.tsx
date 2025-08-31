@@ -9,8 +9,8 @@ import ErrorPage from "../features/ErrorPage";
 import ServerError from "../errors/ServerError";
 import NotFound from "../errors/NotFound";
 import ShoppingCartPage from "../features/cart/ShoppingCartPage";
-import LoginPage from "../features/account/LoginPage";
-import RegisterPage from "../features/account/RegisterPage";
+import LoginPage from "../features/account/loginPage";
+import RegisterPage from "../features/account/registerPage";
 
 export const router = createBrowserRouter([
     {

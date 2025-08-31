@@ -17,9 +17,7 @@ function App() {
     await dispatch(getUser());
     await dispatch(getCart());  
   }
-
-
-
+  
   useEffect(() => {
     initApp().then(() => setLoading(false));
   }, []);
