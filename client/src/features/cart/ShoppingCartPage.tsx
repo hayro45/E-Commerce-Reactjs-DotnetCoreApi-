@@ -1,6 +1,7 @@
-import { Alert, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Alert, Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { AddCircleOutline, Delete, RemoveCircleOutline } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
+import { Link } from "react-router";
 import CartSummary from "./CartSummary";
 import { currencyTRY } from "../../utils/formatCurrency";
 import { useAppDispatch, useAppSelector } from "../../store/store";
@@ -14,6 +15,7 @@ export default function ShoppingCartPage()
     if(cart?.cartItems.length === 0) return <Alert severity="warning">Sepetinizde ürün yok</Alert>
 
     return (
+        <>
         <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
@@ -33,7 +35,7 @@ export default function ShoppingCartPage()
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                  <TableCell component="th" scope="row">
-                  <img src={`http://localhost:5037/images/${item.imageUrl}`} style={{height: 60}}/>
+                  <img src={`http://localhost:5291/images/${item.imageUrl}`} style={{height: 60}} alt={item.name}/>
                 </TableCell>
                 <TableCell component="th" scope="row">
                   {item.name}
@@ -69,5 +71,18 @@ export default function ShoppingCartPage()
           </TableBody>
         </Table>
       </TableContainer>
+
+      
+      <Box display="flex" justifyContent="flex-end" sx={{ mt: 3 }}>
+        <Link to="/checkout" style={{ textDecoration: 'none' }}>
+          <Button 
+            variant="contained" 
+            color="primary"
+            aria-label="Checkout sayfasına git"
+          >
+            Checkout
+          </Button>
+        </Link>
+      </Box>      </>
     );
 }
