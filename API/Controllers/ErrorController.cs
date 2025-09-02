@@ -35,6 +35,6 @@ public class ErrorController : ControllerBase
     [HttpGet("server-error")]
     public IActionResult ServerError()
     {
-        throw new Exception("server error"); // 500
+        throw new Exception("server error");
     }
 }

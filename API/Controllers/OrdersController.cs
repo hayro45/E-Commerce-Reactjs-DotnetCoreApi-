@@ -11,16 +11,16 @@ namespace API.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class OrderController : ControllerBase
+public class OrdersController : ControllerBase
 {
     private readonly DataContext _context;
 
-    public OrderController(DataContext context)
+    public OrdersController(DataContext context)
     {
         _context = context;
     }
 
-    [HttpGet("GetOrders")]
+    [HttpGet]
     public async Task<ActionResult<List<Order>>> GetOrders()
     {
         var orders = await _context.Orders
@@ -32,7 +32,7 @@ public class OrderController : ControllerBase
         return Ok(orders);
     }
 
-    [HttpGet("{id}", Name = "GetOrder")]
+    [HttpGet("{id}")]
     public async Task<ActionResult<OrderDTO>> GetOrder(int id)
     {
         var order = await _context.Orders
@@ -45,7 +45,7 @@ public class OrderController : ControllerBase
 
         return Ok(order);
     }
-    [HttpPost("CreateOrder")]
+    [HttpPost]
     public async Task<ActionResult<Order>> CreateOrder(CreateOrderDTO createOrderDTO)
     {
 
@@ -93,7 +93,7 @@ public class OrderController : ControllerBase
         var result = await _context.SaveChangesAsync();
         if(result > 0)
         {
-            return CreatedAtRoute(nameof(GetOrder), new { id = order.Id }, order.Id);
+            return CreatedAtAction(nameof(GetOrder), new { id = order.Id }, new { id = order.Id });
         }
         return BadRequest(new ProblemDetails { Title = "Problem saving changes" });
     }

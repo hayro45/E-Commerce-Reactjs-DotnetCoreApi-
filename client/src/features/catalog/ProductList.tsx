@@ -7,15 +7,23 @@ interface Props {
 }
 
 export default function ProductList({products}: Props) {
-  return (
-    <Box
-      display="grid"
-      gap={2}
-      gridTemplateColumns={{ xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }}
-    >
-      {products.map((p: IProduct) => (
-        <Product key={p.id} product={p} />
-      ))}
-    </Box>
-  );
-}
+    return (
+      <Box sx={{
+        display: 'grid',
+        gridTemplateColumns: {
+          xs: '1fr',
+          sm: 'repeat(2, 1fr)',
+          md: 'repeat(3, 1fr)',
+          lg: 'repeat(4, 1fr)',
+        },
+        gap: 2,
+        p: 2
+      }}>
+        { products.map((p: IProduct) => (
+          <Box key={p.id}>
+            <Product product={p} />
+          </Box>
+        )) }
+      </Box>
+    );
+  }

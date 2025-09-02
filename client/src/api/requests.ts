@@ -49,8 +49,8 @@ axios.interceptors.response.use(response => {
 
 const queries = {
     get: (url: string) => axios.get(url).then((response: AxiosResponse) => response.data), 
-    post: (url: string, body: {}) => axios.post(url, body).then((response: AxiosResponse) => response.data), 
-    put: (url: string, body: {}) => axios.put(url, body).then((response: AxiosResponse) => response.data), 
+    post: (url: string, body: object) => axios.post(url, body).then((response: AxiosResponse) => response.data), 
+    put: (url: string, body: object) => axios.put(url, body).then((response: AxiosResponse) => response.data), 
     delete: (url: string) => axios.delete(url).then((response: AxiosResponse) => response.data), 
 }
 
@@ -72,6 +72,11 @@ const Cart = {
     addItem: (productId: number, quantity = 1) => queries.post(`cart?productId=${productId}&quantity=${quantity}`, {}),
     deleteItem: (productId: number, quantity = 1) => queries.delete(`cart?productId=${productId}&quantity=${quantity}`)
 }
+const Order = {
+    getOrders: () => queries.get("orders"),
+    getOrder: (id: number) => queries.get(`orders/${id}`),
+    createOrder: (formData: any) => queries.post("orders", formData)
+}
 
 const Account = {
     login: (formData: any) => queries.post("account/login", formData),
@@ -80,7 +85,7 @@ const Account = {
 }
 
 const requests = {
-    Catalog, Errors, Cart, Account
+    Catalog, Errors, Cart, Account, Order
 }
 
 export default requests

@@ -15,12 +15,10 @@ public class AccountController : ControllerBase
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly TokenService _tokenService;
+
     private readonly DataContext _context;
 
-    public AccountController(
-        UserManager<AppUser> userManager,
-        TokenService tokenService,
-        DataContext context)
+    public AccountController(UserManager<AppUser> userManager, TokenService tokenService, DataContext context)
     {
         _userManager = userManager;
         _tokenService = tokenService;
@@ -55,7 +53,7 @@ public class AccountController : ControllerBase
 
             cookieCart.CustomerId = model.UserName;
             await _context.SaveChangesAsync();
-            
+
             return Ok(new UserDTO
             {
                 Name = user.Name!,
@@ -65,20 +63,22 @@ public class AccountController : ControllerBase
 
         return Unauthorized();
     }
-    private async Task<Cart> GetOrCreate(string cusId)
+
+    private async Task<Cart> GetOrCreate(string custId)
     {
         var cart = await _context.Carts
                     .Include(i => i.CartItems)
                     .ThenInclude(i => i.Product)
-                    .Where(i => i.CustomerId == cusId)
+                    .Where(i => i.CustomerId == custId)
                     .FirstOrDefaultAsync();
 
         if (cart == null)
         {
             var customerId = User.Identity?.Name;
-            if (customerId == null)
+
+            if (string.IsNullOrEmpty(customerId))
             {
-                customerId=Guid.NewGuid().ToString();
+                customerId = Guid.NewGuid().ToString();
                 var cookieOptions = new CookieOptions
                 {
                     Expires = DateTime.Now.AddMonths(1),
@@ -87,7 +87,7 @@ public class AccountController : ControllerBase
 
                 Response.Cookies.Append("customerId", customerId, cookieOptions);
             }
-            
+
             cart = new Cart { CustomerId = customerId };
 
             _context.Carts.Add(cart);
@@ -96,6 +96,7 @@ public class AccountController : ControllerBase
 
         return cart;
     }
+
     [HttpPost("register")]
     public async Task<IActionResult> CreateUser(RegisterDTO model)
     {

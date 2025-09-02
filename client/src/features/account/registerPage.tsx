@@ -13,29 +13,30 @@ export default function RegisterPage()
     const {register, handleSubmit, setError, formState: {errors, isSubmitting, isValid} } = useForm({
         defaultValues: {
             username: "",
-            password: "",
             name: "",
             email: "",
+            password: ""
         },
         mode: "onTouched"
     });
 
     async function submitForm(data: FieldValues) {
         requests.Account.register(data)
-        .then(() => {
-            toast.success("Registration successful");
-            navigate("/login");
-        }).catch(result => {
-            const {data: errors} = result;
-            
-            errors.forEach((error: any)=> {
-                if(error.code=="DuplicateUserName"){
-                    setError("username", {message: error.description});
-                }else if(error.code=="DuplicateEmail"){
-                    setError("email", {message: error.description});
-                }
-            })
-        });
+            .then(() => {
+                toast.success("user created.");
+                navigate("/login")
+            }).catch(result => {
+                const { data:errors } = result;
+
+                errors.forEach((error:any) => {
+                    if(error.code == "DuplicateUserName") {
+                        setError("username", { message: error.description });
+                    }
+                    else if(error.code == "DuplicateEmail") {
+                        setError("email", { message: error.description });
+                    }
+                });
+            });
     }
     
     return (
@@ -48,8 +49,7 @@ export default function RegisterPage()
                 <Box component="form" onSubmit={handleSubmit(submitForm)} noValidate sx={{mt: 2}}>
                     <TextField 
                         {...register("username", {required: "username is required"})}
-                        label="Enter username"
-                        type="text"
+                        label="Enter username" 
                         fullWidth autoFocus 
                         sx={{mb: 2}} 
                         size="small"
@@ -59,8 +59,7 @@ export default function RegisterPage()
                     <TextField 
                         {...register("name", {required: "name is required"})}
                         label="Enter name" 
-                        type="text"
-                        fullWidth   
+                        fullWidth 
                         sx={{mb: 2}} 
                         size="small"
                         error={!!errors.name}
@@ -71,12 +70,11 @@ export default function RegisterPage()
                             required: "email is required",
                             pattern: {
                                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                message: "Invalid email address"
+                                message: "email is not valid"
                             }
                         })}
                         label="Enter email" 
-                        type="email"
-                        fullWidth   
+                        fullWidth 
                         sx={{mb: 2}} 
                         size="small"
                         error={!!errors.email}
@@ -89,14 +87,11 @@ export default function RegisterPage()
                         }})}
                         label="Enter password" 
                         type="password" 
-                        fullWidth  
+                        fullWidth 
                         sx={{mb: 2}} 
                         size="small"
                         error={!!errors.password}
                         helperText={errors.password?.message}></TextField>
-                    
-                    
-
 
                     <LoadingButton 
                         loading={isSubmitting} 
