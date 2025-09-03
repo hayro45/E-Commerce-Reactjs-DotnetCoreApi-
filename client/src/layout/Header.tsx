@@ -75,9 +75,7 @@ export default function Header() {
 
 
                         <Menu id="user-menu" anchorEl={anchorEl} open={open} onClose={handleMenuClose}>
-                          <MenuItem onClick={() => {
-                            <Link to="/orders">Orders</Link>
-                          }}>Orders</MenuItem>
+                          <MenuItem component={Link} to="/orders">Orders</MenuItem>
                           <MenuItem onClick={() => {
                             dispatch(logout())
                             dispatch(clearCart())
