@@ -59,7 +59,7 @@ public class CartController : ControllerBase
     }
     private string GetCustomerId()
     {
-        return User.Identity?.Name ?? Request.Cookies["customerId"];
+        return User.Identity?.Name ?? Request.Cookies["customerId"] ?? string.Empty;
     }
     private async Task<Cart> GetOrCreate(string cusId)
     {

@@ -158,7 +158,13 @@ namespace API.Migrations
                     b.Property<string>("AddressLine")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("BasketId")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("City")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ConversationId")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CustomerId")

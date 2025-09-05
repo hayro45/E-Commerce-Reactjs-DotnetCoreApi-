@@ -16,41 +16,50 @@ export default function PaymentForm(){
         }}>
             <Box>
                 <TextField 
-                    {...register("card_name", {required: "card name is required"})}
+                    {...register("cardname", {required: "card name is required"})}
                     label="Enter card name" 
                     fullWidth autoFocus 
                     sx={{mb: 2}} 
                     size="small"
-                    error={!!errors.card_name}></TextField>
+                    error={!!errors.cardname}></TextField>
 
             </Box>
             <Box>
                 <TextField 
-                    {...register("card_number", {required: "card number is required"})}
+                    {...register("cardnumber", {required: "card number is required"})}
                     label="Enter card number" 
                     fullWidth 
                     sx={{mb: 2}} 
                     size="small"
-                    error={!!errors.card_number}></TextField>
+                    error={!!errors.cardnumber}></TextField>
             </Box>
 
             <Box>
                 <TextField 
-                    {...register("expire_date", {required: "expire date is required"})}
-                    label="Enter expire date    " 
+                    {...register("cardexpiremonth", {required: "expire month is required"})}
+                    label="Enter expire month" 
                     fullWidth 
                     sx={{mb: 2}} 
                     size="small"
-                    error={!!errors.expire_date}></TextField>
+                    error={!!errors.cardexpiremonth}></TextField>
             </Box>
             <Box>
                 <TextField 
-                    {...register("card_cvv", {required: "card cvv is required"})}
-                    label="Enter card cvv" 
+                    {...register("cardexpireyear", {required: "expire year is required"})}
+                    label="Enter expire year" 
                     fullWidth 
                     sx={{mb: 2}} 
                     size="small"
-                    error={!!errors.card_cvv}></TextField>
+                    error={!!errors.cardexpireyear}></TextField>
+            </Box>
+            <Box>
+                <TextField 
+                    {...register("cardcvc", {required: "card cvc is required"})}
+                    label="Enter card cvc" 
+                    fullWidth 
+                    sx={{mb: 2}} 
+                    size="small"
+                    error={!!errors.cardcvc}></TextField>
             </Box>
         </Box>
     );

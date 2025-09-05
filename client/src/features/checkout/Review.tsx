@@ -21,7 +21,7 @@ export default function Review(){
                             {getValues("phone")}
                         </Typography>
                          <Typography variant="body2">
-                            {getValues("address")} / {getValues("city")}
+                            {getValues("addressline")} / {getValues("city")}
                         </Typography>
                     </div>
                     <div>
@@ -30,13 +30,16 @@ export default function Review(){
                             Ödeme Bilgileri
                         </Typography>
                         <Typography variant="body2">
-                            {getValues("card_name")} 
+                            {getValues("cardname")} 
                         </Typography>
                          <Typography variant="body2">
-                            {getValues("card_number")}
+                            {getValues("cardnumber")}
                         </Typography>
                          <Typography variant="body2">
-                            {getValues("expiry_date")}
+                            {getValues("cardexpiremonth")}/{getValues("cardexpireyear")}
+                        </Typography>
+                        <Typography variant="body2">
+                            {getValues("cardcvv")}
                         </Typography>
                     </div>
 
