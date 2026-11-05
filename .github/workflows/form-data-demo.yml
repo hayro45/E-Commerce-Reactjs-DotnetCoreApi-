@@ -1,0 +1,49 @@
+name: Form data demo
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ASPNETCORE_ENVIRONMENT: FormDataDemo
+      ASPNETCORE_URLS: http://127.0.0.1:5037
+      ConnectionStrings__defaultConnection: "Data Source=:memory:"
+      JWTSecurity__SecretKey: form-data-demo-ci-only-not-a-deployment-secret
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+      - name: Verify API form binding
+        run: dotnet test tests/API.Tests/API.Tests.csproj
+      - name: Install client dependencies
+        working-directory: client
+        run: npm ci
+      - name: Build client
+        working-directory: client
+        run: npm run build
+      - name: Lint demo files
+        working-directory: client
+        run: npx eslint src/features/form-data-demo/FormDataDemo.tsx e2e/form-data-demo.spec.ts playwright.config.ts
+      - name: Install browser
+        working-directory: client
+        run: npx playwright install --with-deps chromium --no-shell
+      - name: Start local demo API
+        run: |
+          dotnet run --project API/API.csproj --no-build --no-launch-profile > api.log 2>&1 &
+          curl --fail --retry 30 --retry-connrefused --retry-delay 1 http://127.0.0.1:5037/api/form-data-demo/options
+      - name: Verify browser-to-API flow
+        working-directory: client
+        run: npm run test:e2e

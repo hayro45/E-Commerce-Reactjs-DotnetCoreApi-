@@ -5,6 +5,9 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   server: {
     port: 3000,
+    proxy: {
+      '/api/form-data-demo': 'http://127.0.0.1:5037',
+    },
   },
   plugins: [react()],
 })

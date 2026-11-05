@@ -4,6 +4,7 @@ using API.Entity;
 using API.Middlewares;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -55,6 +56,10 @@ builder.Services.AddAuthentication(x =>
         });
 
 builder.Services.AddControllers();
+if (builder.Environment.IsEnvironment("FormDataDemo"))
+{
+    builder.Services.AddDataProtection().UseEphemeralDataProtectionProvider();
+}
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<TokenService>();
@@ -87,6 +92,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-SeedDatabase.Initialize(app);
+// The stateless form demo can run without the store database or seeded users.
+if (!app.Environment.IsEnvironment("FormDataDemo"))
+{
+    SeedDatabase.Initialize(app);
+}
 
 app.Run();
+
+public partial class Program { }

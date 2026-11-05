@@ -14,9 +14,11 @@ import RegisterPage from "../features/account/registerPage";
 import CheckoutPage from "../features/checkout/CheckoutPage";
 import AuthGuard from "./AuthGuard";
 import OrderList from "../features/orders/orderList";
+import FormDataDemo from "../features/form-data-demo/FormDataDemo";
 
 
 export const router = createBrowserRouter([
+    { path: "/form-data-demo", element: <FormDataDemo /> },
     {
         path: "/",
         element: <App />,
