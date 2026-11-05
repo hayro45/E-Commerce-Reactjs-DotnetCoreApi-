@@ -53,3 +53,10 @@ This is a full-stack e-commerce application built with .NET Core for the backend
 
 ## License
 This project is licensed under the MIT License.
+
+## React + .NET form submission demo
+
+See [the repeated-field form demo](docs/form-data-demo.md) for a stateless
+Material UI multiple-select example backed by .NET form binding, validation,
+HTTP integration tests and browser tests. Run it at `/form-data-demo` without
+starting the store database or seeding accounts.

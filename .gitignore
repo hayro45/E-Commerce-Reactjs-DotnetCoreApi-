@@ -21,6 +21,7 @@ dist-ssr
 *.ntvs*
 *.njsproj
 *.sln
+!FormDataDemo.sln
 *.sw?
 
 # Dotnet Core specific
@@ -38,3 +39,7 @@ appsettings*.json
 *.runtimeconfig.json
 *.deps.json
 *.staticwebassets.*
+.tools/
+TestResults/
+playwright-report/
+test-results/
